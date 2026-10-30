@@ -57,6 +57,7 @@
   map.on('click', function (evento) { seleccionar({ latitud: evento.latlng.lat, longitud: evento.latlng.lng }, true); });
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
+    referrerPolicy: 'strict-origin-when-cross-origin',
     maxZoom: 19
   }).on('tileerror', function () { falloTiles = true; emitir('error_tiles'); }).on('tileload', function () { if (!falloTiles) emitir('tiles_listos'); }).addTo(map);
   L.circleMarker(espol, { radius: 5, color: '#64748B' }).addTo(map).bindPopup('ESPOL · Campus Gustavo Galindo');
