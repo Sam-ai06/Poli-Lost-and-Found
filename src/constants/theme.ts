@@ -65,24 +65,25 @@ export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
 export const MaxContentWidth = 800;
 
 /**
- * Identidad visual de Findyp. Otra universidad puede personalizar la aplicación
- * cambiando únicamente estos valores.
+ * Identidad visual de Findyp, basada en el logo (morado #3C1A4D y blanco). Otra
+ * universidad puede personalizar la aplicación cambiando únicamente estos valores.
  */
 export const Marca = {
   nombre: 'Findyp',
   colores: {
-    primario: '#4F46E5',
-    primarioPresionado: '#4338CA',
-    primarioSuave: '#EEF0FF',
-    primarioBorde: '#C7CAF7',
-    primarioOscuro: '#312E81',
-    acento: '#F59E0B',
+    primario: '#5B2A86',
+    primarioPresionado: '#4A2170',
+    primarioSuave: '#F3EDF8',
+    primarioBorde: '#D8C7EA',
+    /** Fondo del logo de Findyp. */
+    primarioOscuro: '#3C1A4D',
+    acento: '#C9A7E8',
     textoSobrePrimario: '#FFFFFF',
-    textoSuaveSobrePrimario: '#E0E7FF',
-    texto: '#0F172A',
+    textoSuaveSobrePrimario: '#EDE4F5',
+    texto: '#1F1430',
     textoSecundario: '#64748B',
     fondo: '#FFFFFF',
-    fondoPagina: '#F8F9FC',
+    fondoPagina: '#F9F7FB',
     borde: '#E2E8F0',
     exito: '#15803D',
     exitoPunto: '#16A34A',
@@ -93,7 +94,7 @@ export const Marca = {
     neutroSuave: '#F1F5F9',
     error: '#B91C1C',
     errorSuave: '#FEE2E2',
-    imagenFondo: '#E8EAF6',
+    imagenFondo: '#EFE8F5',
   },
   radios: {
     pequeno: 8,
