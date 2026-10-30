@@ -19,8 +19,11 @@ export default function Mapa({ inicial, actual, alSeleccionar, alEstado }: Props
   useEffect(() => {
     if (actual) ref.current?.contentWindow?.postMessage({ canal: 'findyp-mapa-v1', tipo: 'centrar', coordenadas: actual }, '*');
   }, [actual]);
+  // This document contains only bundled scripts and validated coordinates. Keep
+  // its real origin so OSM tile requests can identify the referring website.
   return <iframe
-    ref={ref} title="Mapa interactivo de ESPOL" srcDoc={html} sandbox="allow-scripts allow-popups"
+    ref={ref} title="Mapa interactivo de ESPOL" srcDoc={html} sandbox="allow-scripts allow-same-origin allow-popups"
+    referrerPolicy="strict-origin-when-cross-origin"
     style={{ flex: 1, width: '100%', minHeight: 120, border: 0, background: '#E8EAF6' }}
     onError={() => alEstado('error')}
     onLoad={() => { if (actual) ref.current?.contentWindow?.postMessage({ canal: 'findyp-mapa-v1', tipo: 'centrar', coordenadas: actual }, '*'); }}

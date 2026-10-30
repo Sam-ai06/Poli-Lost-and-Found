@@ -7,7 +7,7 @@ import { migrarReportesLocales } from './migracion';
 
 export function MigracionReportes({ children }: { children: ReactNode }) {
   const { estado, sesion } = useSesion();
-  const id = sesion?.user.id;
+  const id = sesion?.user.is_anonymous ? undefined : sesion?.user.id;
   const [intento, setIntento] = useState(0);
   const [resultado, setResultado] = useState<{ id: string; error: string | null } | null>(null);
   const [pospuesta, setPospuesta] = useState<string | null>(null);

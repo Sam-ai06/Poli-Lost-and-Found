@@ -23,9 +23,9 @@ export function SesionProvider({ children }: PropsWithChildren) {
 
   const valor = useMemo<ContextoSesion>(
     () => ({
-      estado: sesion === undefined ? 'cargando' : sesion ? 'con_sesion' : 'sin_sesion',
+      estado: sesion === undefined ? 'cargando' : sesion && !sesion.user.is_anonymous ? 'con_sesion' : 'sin_sesion',
       sesion: sesion ?? null,
-      invitado,
+      invitado: invitado || !!sesion?.user.is_anonymous,
       continuarComoInvitado: () => setInvitado(true),
     }),
     [sesion, invitado]

@@ -26,7 +26,7 @@ export default function PerfilScreen() {
     }
   };
 
-  if (!sesion) {
+  if (!sesion || sesion.user.is_anonymous) {
     return (
       <Pantalla>
         <Encabezado titulo="Perfil" />
@@ -36,8 +36,8 @@ export default function PerfilScreen() {
           </View>
           <Text style={styles.titulo}>Estás explorando sin cuenta</Text>
           <Text style={styles.texto}>
-            Inicia sesión con tu correo institucional para publicar objetos, registrar búsquedas y
-            solicitar recuperaciones.
+            Puedes publicar objetos sin crear una cuenta. Inicia sesión con tu correo institucional
+            para acceder a tu cuenta desde otros dispositivos.
           </Text>
           <View style={styles.acciones}>
             <Boton etiqueta="Iniciar sesión" onPress={() => router.push('/acceso/iniciar-sesion')} />

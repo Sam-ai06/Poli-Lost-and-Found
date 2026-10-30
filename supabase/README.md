@@ -1,5 +1,7 @@
 # API de objetos perdidos
 
+La publicación desde la app admite invitados mediante una sesión anónima automática, sin correo ni contraseña. En el proyecto remoto activa **Authentication → Sign In / Providers → Anonymous Sign-Ins**; `supabase/config.toml` habilita lo mismo para desarrollo local. Las políticas conservan la propiedad de cada reporte y de sus fotos. La sesión se guarda en el dispositivo; cerrar sesión o borrar los datos impide recuperar los reportes de invitado desde esa identidad.
+
 La API está desplegada en `https://gbwrmyfotkainzgaseet.supabase.co/functions/v1/api`. Las rutas siguientes son relativas a esa dirección.
 
 Envía `apikey: <EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY>` en cada petición. Para escribir o consultar reclamaciones, envía también `Authorization: Bearer <access_token>` de una sesión de Supabase Auth. La función verifica el token con Supabase Auth y la base de datos comprueba la identidad y los permisos. Las lecturas públicas de objetos no necesitan sesión.

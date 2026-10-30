@@ -15,7 +15,24 @@ function comprobar(error: ErrorBD) {
   if (error) throw new Error(error.message || 'No se pudo conectar con Supabase.');
 }
 
+let accesoInvitado: Promise<void> | null = null;
+
+async function asegurarSesion(): Promise<void> {
+  const { data, error } = await supabase.auth.getSession();
+  comprobar(error);
+  if (data.session) return;
+  accesoInvitado ??= (async () => {
+    const { error } = await supabase.auth.signInAnonymously();
+    if (error?.code === 'anonymous_provider_disabled') {
+      throw new Error('Activa el acceso anónimo en Supabase para publicar sin cuenta.');
+    }
+    comprobar(error);
+  })().finally(() => { accesoInvitado = null; });
+  await accesoInvitado;
+}
+
 async function usuario(): Promise<Usuario> {
+  await asegurarSesion();
   const { data, error } = await supabase.auth.getUser();
   if (error || !data.user) throw new Error('Inicia sesión para guardar y gestionar tus reportes.');
   const { data: perfil, error: errorPerfil } = await supabase.from('perfiles').select('nombre').eq('id', data.user.id).maybeSingle();
@@ -91,6 +108,7 @@ async function subirImagen(uri: string | null, bucket: string): Promise<{ ruta: 
 }
 
 async function guardar(tipo: 'objeto' | 'busqueda', datos: NuevoObjeto | NuevaBusqueda, id?: string, origen?: string, estado?: string): Promise<string> {
+  await asegurarSesion();
   const bucket = tipo === 'objeto' ? 'objetos-imagenes' : 'busquedas-imagenes';
   if (origen) {
     const actual = await usuario();
