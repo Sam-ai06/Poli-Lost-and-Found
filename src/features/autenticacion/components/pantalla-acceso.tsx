@@ -14,7 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Icono } from '@/components/icono';
 import { Marca } from '@/constants/theme';
 
-import { LogoInstitucional } from './logo-institucional';
+import { LogoApp } from './logo-app';
 
 interface PantallaAccesoProps {
   titulo: string;
@@ -62,7 +62,7 @@ export function PantallaAcceso({
 
               <View style={styles.encabezado}>
                 <View style={styles.marcas}>
-                  <LogoInstitucional />
+                  <LogoApp />
                   <View style={styles.separador} />
                   <View>
                     <Text style={styles.nombreApp}>{Marca.nombre}</Text>
