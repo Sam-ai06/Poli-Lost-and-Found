@@ -1,11 +1,8 @@
 import { Redirect, router } from 'expo-router';
 import { useRef, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 
 import { Boton } from '@/components/boton';
-import { Icono } from '@/components/icono';
 import { Institucion } from '@/constants/institucion';
-import { Marca } from '@/constants/theme';
 
 import { CampoTexto, type CampoRef } from '../components/campo-texto';
 import { EnlaceTexto } from '../components/enlace-texto';
@@ -15,7 +12,6 @@ import { RequisitosContrasena } from '../components/requisitos-contrasena';
 import { mensajeCorreoVerificado } from '../domain/correo-verificado';
 import {
   describirDominios,
-  normalizarCorreo,
   validarConfirmacion,
   validarContrasenaNueva,
   validarCorreoInstitucional,
@@ -35,7 +31,6 @@ export default function RegistroScreen() {
   const confirmacionRef = useRef<CampoRef>(null);
   const [enviando, setEnviando] = useState(false);
   const [errorServidor, setErrorServidor] = useState<string | null>(null);
-  const [correoPendiente, setCorreoPendiente] = useState<string | null>(null);
 
   const { valores, errores, cambiar, tocar, intentarEnviar } = useFormularioAcceso(
     { nombre: '', correo: '', contrasena: '', confirmacion: '' },
@@ -47,7 +42,7 @@ export default function RegistroScreen() {
     })
   );
 
-  if (estado === 'con_sesion' && !correoPendiente) return <Redirect href="/" />;
+  if (estado === 'con_sesion') return <Redirect href="/" />;
 
   const enviar = async () => {
     const campoInvalido = intentarEnviar();
@@ -64,36 +59,14 @@ export default function RegistroScreen() {
     setEnviando(true);
     setErrorServidor(null);
     try {
-      const requiereConfirmacion = await registrarse(valores);
-      if (requiereConfirmacion) setCorreoPendiente(normalizarCorreo(valores.correo));
-      else router.replace('/');
+      await registrarse(valores);
+      router.replace('/');
     } catch (error) {
       setErrorServidor(error instanceof Error ? error.message : 'No pudimos crear tu cuenta.');
     } finally {
       setEnviando(false);
     }
   };
-
-  if (correoPendiente) {
-    return (
-      <PantallaAcceso
-        titulo="Revisa tu correo"
-        subtitulo="Confirmamos que perteneces a la universidad con un enlace enviado a tu correo institucional.">
-        <View style={styles.confirmacion} accessibilityLiveRegion="polite">
-          <View style={styles.iconoExito}>
-            <Icono nombre="correo" tamano={36} color={Marca.colores.exito} />
-          </View>
-          <Text style={styles.tituloExito}>¡Cuenta creada!</Text>
-          <Text style={styles.textoExito}>
-            Enviamos un enlace de confirmación a{' '}
-            <Text style={styles.correo}>{correoPendiente}</Text>. Ábrelo para activar tu cuenta
-            y luego inicia sesión.
-          </Text>
-        </View>
-        <Boton etiqueta="Ir a iniciar sesión" onPress={() => router.replace('/acceso/iniciar-sesion')} />
-      </PantallaAcceso>
-    );
-  }
 
   return (
     <PantallaAcceso
@@ -149,9 +122,6 @@ export default function RegistroScreen() {
       />
 
       <Boton etiqueta="Crear cuenta" icono="universidad" onPress={enviar} cargando={enviando} />
-      <Text style={styles.nota}>
-        Te enviaremos un correo para confirmar que la cuenta te pertenece.
-      </Text>
       <EnlaceTexto
         prefijo="¿Ya tienes cuenta?"
         texto="Inicia sesión"
@@ -160,24 +130,3 @@ export default function RegistroScreen() {
     </PantallaAcceso>
   );
 }
-
-const styles = StyleSheet.create({
-  confirmacion: { alignItems: 'center', gap: 10, paddingVertical: 8 },
-  iconoExito: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: Marca.colores.exitoSuave,
-  },
-  tituloExito: { fontSize: 22, fontWeight: '800', color: Marca.colores.texto },
-  textoExito: {
-    fontSize: 16,
-    lineHeight: 23,
-    textAlign: 'center',
-    color: Marca.colores.textoSecundario,
-  },
-  correo: { fontWeight: '700', color: Marca.colores.texto },
-  nota: { fontSize: 13, lineHeight: 18, textAlign: 'center', color: Marca.colores.textoSecundario },
-});

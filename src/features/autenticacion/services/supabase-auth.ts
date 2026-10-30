@@ -27,7 +27,7 @@ function obtenerCliente(): Promise<SupabaseClient> {
 
 const MENSAJES_SUPABASE: [RegExp, string][] = [
   [/invalid login credentials/i, 'Correo o contraseña incorrectos.'],
-  [/email not confirmed/i, 'Confirma tu correo con el enlace que te enviamos antes de iniciar sesión.'],
+  [/email not confirmed/i, 'El servidor aún exige confirmar el correo. Contacta al administrador para habilitar el acceso directo.'],
   [/already registered|already exists/i, 'Ya existe una cuenta con este correo. Inicia sesión.'],
   [/rate limit|too many/i, 'Demasiados intentos. Espera unos minutos e inténtalo de nuevo.'],
   [/password/i, 'La contraseña no cumple los requisitos del servidor.'],
@@ -65,8 +65,8 @@ export interface DatosRegistro {
   contrasena: string;
 }
 
-/** Devuelve `true` si Supabase exige confirmar el correo antes de iniciar sesión. */
-export async function registrarse({ nombre, correo, contrasena }: DatosRegistro): Promise<boolean> {
+/** Crea la cuenta e inicia sesión sin confirmación por correo. */
+export async function registrarse({ nombre, correo, contrasena }: DatosRegistro): Promise<void> {
   const email = exigirCorreoInstitucional(correo);
   try {
     const cliente = await obtenerCliente();
@@ -76,7 +76,11 @@ export async function registrarse({ nombre, correo, contrasena }: DatosRegistro)
       options: { data: { nombre_completo: nombre.trim() } },
     });
     if (error) throw error;
-    return !data.session;
+    if (!data.session) {
+      throw new ErrorAutenticacion(
+        'No se pudo iniciar sesión. Si ya tienes una cuenta, inicia sesión; si es nueva, el administrador debe desactivar Confirm email en Supabase.'
+      );
+    }
   } catch (error) {
     throw traducirError(error);
   }

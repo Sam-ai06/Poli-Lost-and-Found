@@ -1,6 +1,9 @@
 [auth]
 enable_anonymous_sign_ins = true
 
+[auth.email]
+enable_confirmations = false
+
 [functions.api]
 # The handler validates user JWTs itself; public GET requests do not require one.
 verify_jwt = false

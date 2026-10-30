@@ -1,5 +1,7 @@
 # API de objetos perdidos
 
+El registro con correo institucional y contraseña inicia sesión directamente, sin confirmar el correo. En proyectos alojados, desactiva **Authentication → Sign In / Providers → Email → Confirm email**; `supabase/config.toml` configura `auth.email.enable_confirmations = false` para desarrollo local. Cambiar este archivo no modifica por sí solo el proyecto remoto. Comprueba que `/auth/v1/settings` devuelva `mailer_autoconfirm: true`.
+
 La publicación desde la app admite invitados mediante una sesión anónima automática, sin correo ni contraseña. En el proyecto remoto activa **Authentication → Sign In / Providers → Anonymous Sign-Ins**; `supabase/config.toml` habilita lo mismo para desarrollo local. Las políticas conservan la propiedad de cada reporte y de sus fotos. La sesión se guarda en el dispositivo; cerrar sesión o borrar los datos impide recuperar los reportes de invitado desde esa identidad.
 
 La API está desplegada en `https://gbwrmyfotkainzgaseet.supabase.co/functions/v1/api`. Las rutas siguientes son relativas a esa dirección.

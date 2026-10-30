@@ -12,7 +12,7 @@ import { useSesion } from '../services/sesion';
 const BENEFICIOS: { icono: NombreIcono; titulo: string; texto: string }[] = [
   { icono: 'agregar', titulo: 'Publica lo que encuentras', texto: 'Con foto, lugar y punto de entrega.' },
   { icono: 'buscar', titulo: 'Busca lo que perdiste', texto: 'Te mostramos posibles coincidencias.' },
-  { icono: 'escudo', titulo: 'Recupéralo con seguridad', texto: 'Solo la comunidad universitaria verificada.' },
+  { icono: 'escudo', titulo: 'Recupéralo con seguridad', texto: 'Conecta con la comunidad universitaria.' },
 ];
 
 const OBJETOS: { icono: NombreIcono; texto: string }[] = [
