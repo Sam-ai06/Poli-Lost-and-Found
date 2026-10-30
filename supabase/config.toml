@@ -1,0 +1,3 @@
+[functions.api]
+# The handler validates user JWTs itself; public GET requests do not require one.
+verify_jwt = false

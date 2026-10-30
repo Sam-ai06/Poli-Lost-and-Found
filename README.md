@@ -2,6 +2,21 @@
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
+## Supabase
+
+El proyecto está conectado a `poli-lost-and-found` en Supabase.
+
+- Panel: https://supabase.com/dashboard/project/gbwrmyfotkainzgaseet
+- Cliente compartido: `src/lib/supabase.ts`. Usa `import { supabase } from '@/lib/supabase'` para realizar consultas.
+- La configuración local vive en `.env.local` (ignorado por Git). En otro equipo, copia `.env.example` a `.env.local` y completa la URL y la clave pública del panel.
+- Solo usa claves públicas en `EXPO_PUBLIC_*`; nunca incluyas claves secretas o `service_role`.
+- Las sesiones se conservan con el almacenamiento local de Expo en móvil y el del navegador en web.
+- Comprueba la API con `node --env-file=.env.local scripts/check-supabase.mjs`.
+
+La base de datos incluye tablas de objetos, búsquedas y reclamaciones. La [documentación del backend](supabase/README.md) describe las rutas disponibles, la autenticación y sus formatos. La aplicación todavía no incluye pantallas de autenticación ni de gestión de estos datos.
+
+Integración basada en la [guía oficial de Supabase para Expo](https://supabase.com/docs/guides/getting-started/quickstarts/expo-react-native).
+
 ## Get started
 
 1. Install dependencies
