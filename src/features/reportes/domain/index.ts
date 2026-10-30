@@ -1,5 +1,6 @@
 import { categorias } from '../types/index.ts';
 import type { Usuario, Objeto, NuevoObjeto, NuevaBusqueda, EstadoLocal, NuevaReclamacion } from '../types/index.ts';
+import { normalizarCoordenadas } from '../../ubicacion/domain.ts';
 export * from '../types/index.ts';
 export const copia = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 export function exigir(condicion: unknown, mensaje: string): asserts condicion { if (!condicion) throw new Error(mensaje); }
@@ -37,6 +38,7 @@ export function validarObjeto(d: NuevoObjeto) {
 }
 export function validarBusqueda(d: NuevaBusqueda) {
   base(d); opcional(d.lugar_aproximado, 'Lugar aproximado', 200);
+  normalizarCoordenadas(d.ubicacion_perdida);
   exigir(d.fecha_perdida === null || (fechaValida(d.fecha_perdida) && d.fecha_perdida <= fechaHoy()), 'Fecha aproximada: usa AAAA-MM-DD y una fecha pasada o actual.');
 }
 export function validarReclamacion(d: NuevaReclamacion) {
@@ -64,6 +66,8 @@ export function validarEstado(raw: unknown, usuarios: readonly Usuario[]): Estad
     exigir(typeof o.creado_en === 'string' && !Number.isNaN(Date.parse(o.creado_en)), 'Marca de tiempo no válida.');
   }
   for (const b of s.busquedas) {
+    // Older v1 searches had only a textual place; never invent coordinates.
+    b.ubicacion_perdida = normalizarCoordenadas(b.ubicacion_perdida);
     texto(b.id, 'Identificador'); exigir(!ids.has(b.id), 'Identificador duplicado.'); ids.add(b.id);
     validarBusqueda(b); exigir(usuarios.some(u => u.id === b.solicitante_id), 'Solicitante no válido.');
     exigir(['activa', 'resuelta', 'cerrada'].includes(b.estado), 'Estado de búsqueda no válido.');

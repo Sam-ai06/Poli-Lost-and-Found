@@ -26,6 +26,15 @@
     "plugins": [
       "expo-router",
       [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Permite centrar el mapa en tu ubicación mientras eliges dónde perdiste el objeto.",
+          "isIosBackgroundLocationEnabled": false,
+          "isAndroidBackgroundLocationEnabled": false,
+          "isAndroidForegroundServiceEnabled": false
+        }
+      ],
+      [
         "expo-image-picker",
         {
           "photosPermission": "Permite elegir una imagen para tus reportes de objetos.",

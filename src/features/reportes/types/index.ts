@@ -1,3 +1,5 @@
+import type { CoordenadasMapa } from '../../ubicacion/types';
+
 export const categorias = ['documentos', 'llaves', 'electronica', 'botellas_termos', 'ropa', 'otros'] as const;
 export type Categoria = (typeof categorias)[number];
 export const etiquetas: Record<Categoria, string> = {
@@ -18,9 +20,10 @@ export type NuevoObjeto = Omit<ObjetoPropio, 'id' | 'publicador_id' | 'estado' |
 export type Busqueda = {
   id: string; solicitante_id: string; categoria: Categoria; descripcion: string; color: string | null;
   fecha_perdida: string | null; lugar_aproximado: string | null; imagen_url: string | null;
+  ubicacion_perdida: CoordenadasMapa | null;
   estado: 'activa' | 'resuelta' | 'cerrada'; creado_en: string;
 };
-export type NuevaBusqueda = Omit<Busqueda, 'id' | 'solicitante_id' | 'estado' | 'creado_en'>;
+export type NuevaBusqueda = Omit<Busqueda, 'id' | 'solicitante_id' | 'estado' | 'creado_en' | 'ubicacion_perdida'> & { ubicacion_perdida?: CoordenadasMapa | null };
 // Private: visible only to the claimant and the object's publisher.
 export type Reclamacion = {
   id: string; objeto_id: string; solicitante_id: string; busqueda_id: string | null;

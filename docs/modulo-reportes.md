@@ -19,7 +19,7 @@ En la navegación inferior abre **Mis reportes**. Desde **Explorar** puedes acce
 2. **Publicar objeto encontrado**: elige una imagen de galería, marca fotografía o referencia y completa título, categoría y descripción. Color e imagen pueden quedar sin indicar (`null`).
 3. Continúa al segundo paso: fecha `AAAA-MM-DD`, lugar del hallazgo y punto de recogida o contacto. La característica de verificación es privada y opcional. Vuelve al paso anterior para comprobar que los datos se conservan.
 4. Publica. El objeto aparece en Mis reportes. Se puede editar mientras está disponible.
-5. **Buscar mi objeto**: registra categoría y descripción. Color, fecha, lugar e imagen son opcionales. Al guardar se abre una lista de demostración por categoría; la búsqueda queda guardada aunque la lista esté vacía.
+5. **Buscar mi objeto**: registra categoría y descripción. Color, fecha, lugar, imagen y punto en el mapa son opcionales. El mapa de Danna permite elegir y confirmar coordenadas de pérdida. Al guardar se abre una lista de demostración por categoría; la búsqueda queda guardada aunque la lista esté vacía.
 6. En Mis reportes selecciona Búsquedas para consultar, editar o cerrar una búsqueda activa. Cerrar conserva el historial.
 7. Cierra completamente la app y vuelve a abrirla. Comprueba que los registros y las fotos guardadas siguen disponibles.
 
@@ -73,7 +73,7 @@ npx.cmd expo export --platform ios --output-dir dist/reportes-ios
 npx.cmd expo export --platform web --output-dir dist/reportes-web
 ```
 
-Lint y typecheck pasan. Las 15 pruebas incluyen creación/edición, permisos, persistencia, errores de guardado, concurrencia, rechazo, aprobación, entrega y privacidad. Una prueba adicional verifica que el catálogo disponible del frontend se migra sin duplicados y que sus reclamaciones conservan el estado al reiniciar.
+Lint y typecheck pasan. Las 21 pruebas incluyen creación/edición, permisos, persistencia, errores de guardado, concurrencia, rechazo, aprobación, entrega, privacidad e integración con el catálogo y el mapa. Los resultados generales están en [verificacion-integracion-general.md](./verificacion-integracion-general.md).
 
 La prueba SQLite abre una base real en disco, guarda, cierra la conexión, vuelve a abrir y verifica datos y usuario. Repite la reapertura después de la aprobación y de la entrega, comprobando los tres estados relacionados. También comprueba que el reinicio no altera una tabla ajena. Las otras pruebas usan el mismo servicio con almacenamiento en memoria para simular fallos. Conservar una URI no demuestra que la imagen se pueda leer en un teléfono: esa comprobación nativa sigue pendiente. Las pruebas requieren Node 24 (ejecución directa de TypeScript y SQLite incorporado), sin añadir dependencias de pruebas.
 
@@ -87,6 +87,7 @@ La web es una vista previa: las confirmaciones con `Alert` están destinadas a A
 
 - Servidor, sesión real, autorización del lado servidor y transacciones HTTP.
 - Motor de coincidencias/Gemma: actualmente hay filtrado demo por categoría. La galería visual del compañero ya está integrada con reportes locales.
+- Cercanía geográfica: el mapa guarda la pérdida, pero los objetos encontrados todavía no tienen coordenadas para comparar distancias.
 - Subida/sincronización de imágenes y limpieza de archivos no utilizados.
 - Verificación interactiva en dispositivos Android/iOS y comparación de ambas propuestas visuales.
 
