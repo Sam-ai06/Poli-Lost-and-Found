@@ -21,6 +21,16 @@ const ICONOS = {
   alerta: { ios: 'exclamationmark.triangle', android: 'error', web: 'error' },
   vacio: { ios: 'tray', android: 'inbox', web: 'inbox' },
   construccion: { ios: 'hammer', android: 'construction', web: 'construction' },
+  correo: { ios: 'envelope', android: 'mail', web: 'mail' },
+  candado: { ios: 'lock', android: 'lock', web: 'lock' },
+  mostrar: { ios: 'eye', android: 'visibility', web: 'visibility' },
+  ocultar: { ios: 'eye.slash', android: 'visibility_off', web: 'visibility_off' },
+  verificado: { ios: 'checkmark.circle.fill', android: 'check_circle', web: 'check_circle' },
+  pendiente: { ios: 'circle', android: 'radio_button_unchecked', web: 'radio_button_unchecked' },
+  escudo: { ios: 'checkmark.shield', android: 'verified_user', web: 'verified_user' },
+  universidad: { ios: 'graduationcap', android: 'school', web: 'school' },
+  salir: { ios: 'rectangle.portrait.and.arrow.right', android: 'logout', web: 'logout' },
+  llave: { ios: 'key', android: 'key', web: 'key' },
 } satisfies Record<string, Extract<SymbolViewProps['name'], object>>;
 
 export type NombreIcono = keyof typeof ICONOS;

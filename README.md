@@ -89,6 +89,7 @@ se guardan en SQLite. La aplicación funciona con datos de prueba y no necesita 
 | --- | --- |
 | `npm run typecheck` (equivale a `npx tsc --noEmit`) | Comprobación de tipos de TypeScript |
 | `npm run lint` | Lint con la configuración de Expo incluida en `eslint.config.js` |
+| `node --test tests/autenticacion.test.mjs` | Pruebas de validación del correo institucional y la contraseña |
 | `npm run test:reportes` | Pruebas del módulo de reportes y de su integración con el catálogo (Node 24) |
 | `npx expo-doctor` | Diagnóstico de dependencias y configuración de Expo |
 | `node --env-file=.env.local scripts/check-supabase.mjs` | Comprueba la conexión con Supabase |
@@ -110,9 +111,12 @@ src/
     buscar.tsx            Registro de búsquedas
     recuperacion/         Solicitud de recuperación
     demo-reportes/        Coincidencias locales, reclamaciones y utilidades demo
+    acceso/               Bienvenida, inicio de sesión, registro y recuperación
   components/             Componentes reutilizables de interfaz
   constants/theme.ts      Tokens de diseño; `Marca` define colores y radios de Findyp
+  constants/institucion.ts Dominios de correo permitidos y logo de la universidad
   data/mock/              Datos ficticios en JSON e imágenes de prueba
+  features/autenticacion/ Acceso: validación, Supabase Auth, sesión y pantallas
   features/reportes/      Módulo de reportes: pantallas, hooks, dominio y almacenamiento local
   hooks/                  Hooks de datos y utilidades
   integrations/           Integración del catálogo con los reportes de demostración
@@ -126,6 +130,23 @@ scripts/                  Comprobaciones de Supabase y pruebas de la API
 supabase/                 Función de la API, SQL del backend y su documentación
 tests/                    Pruebas automatizadas (`node --test`)
 ```
+
+## Acceso y autenticación
+
+Las pantallas de acceso están en `src/app/acceso/` y su lógica en `src/features/autenticacion/`:
+bienvenida, inicio de sesión, registro y recuperación de contraseña.
+
+- Solo se aceptan correos universitarios. Los dominios se configuran en
+  `src/constants/institucion.ts` (`dominiosPermitidos`); `edu.ec` acepta cualquier universidad
+  ecuatoriana, por ejemplo `espol.edu.ec`.
+- El logo de la universidad se configura en el mismo archivo (`logo`). Mientras sea `null`, las
+  pantallas muestran un espacio reservado.
+- Usa Supabase Auth con el cliente de `src/lib/supabase.ts`. Sin `.env.local`, las pantallas se
+  muestran igual y avisan que el acceso no está configurado.
+- Sin sesión, la app abre la bienvenida; **Explorar sin cuenta** permite usar la demostración.
+- La validación del dominio se hace en la aplicación. Para que sea obligatoria, el backend también
+  debe rechazar registros de otros dominios (pendiente del Participante 3).
+- Pruebas de las reglas de validación: `node --test tests/autenticacion.test.mjs`.
 
 ## Capa de acceso a datos
 
