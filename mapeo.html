@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title> Mapa de objetos perdidos - ESPOL</title>
+
+
+    <link rel="stylesheet" href="./leaflet/leaflet.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        #map {
+            height: 550px;
+            width: 100%;
+            border: 2px solid #1f1e1e;
+            border-radius: 10px;
+            
+#btnUbicacion {
+    background-color: #1976d2;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 12px;
+    font-size: 15px;
+}
+
+#btnUbicacion:hover {
+    background-color: #125ca1;
+}
+
+#map {
+    height: 550px;
+    width: 100%;
+}
+
+
+            
+        }
+    </style>
+</head>
+
+<body>
+
+    
+<h2>Mapa de objetos perdidos - ESPOL</h2>
+
+<button id="btnUbicacion">
+    📍 Mi ubicación actual
+</button>
+
+<p id="ubicacionSeleccionada">
+  Haz clic en el mapa para indicar dónde se perdió el objeto.
+</p>
+
+<input type="hidden" id="latitud">
+<input type="hidden" id="longitud">
+<div id="map"></div>
+
+<script src="./leaflet/leaflet.js"></script>
+<script src="./mapaespol.js"></script>
+
+
+
+</body>
+</html>
+
+
+
+
