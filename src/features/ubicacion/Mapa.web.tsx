@@ -19,8 +19,10 @@ export default function Mapa({ inicial, actual, alSeleccionar, alEstado }: Props
   useEffect(() => {
     if (actual) ref.current?.contentWindow?.postMessage({ canal: 'findyp-mapa-v1', tipo: 'centrar', coordenadas: actual }, '*');
   }, [actual]);
+  // allow-same-origin da al documento el origen de la app; sin él las teselas de
+  // OpenStreetMap se piden sin Referer y el servidor responde 403 "Access blocked".
   return <iframe
-    ref={ref} title="Mapa interactivo de ESPOL" srcDoc={html} sandbox="allow-scripts allow-popups"
+    ref={ref} title="Mapa interactivo de ESPOL" srcDoc={html} sandbox="allow-scripts allow-same-origin allow-popups"
     style={{ flex: 1, width: '100%', minHeight: 120, border: 0, background: '#E8EAF6' }}
     onError={() => alEstado('error')}
     onLoad={() => { if (actual) ref.current?.contentWindow?.postMessage({ canal: 'findyp-mapa-v1', tipo: 'centrar', coordenadas: actual }, '*'); }}
