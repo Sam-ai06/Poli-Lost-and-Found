@@ -1,3 +1,4 @@
+import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import type { ReactNode } from 'react';
 import {
@@ -64,8 +65,13 @@ export function PantallaAcceso({
                 <View style={styles.marcas}>
                   <LogoInstitucional />
                   <View style={styles.separador} />
-                  <View>
-                    <Text style={styles.nombreApp}>{Marca.nombre}</Text>
+                  <View style={styles.marcaFindyp}>
+                    <Image
+                      source={require('@/assets/images/findyp-wordmark.png')}
+                      contentFit="contain"
+                      accessibilityLabel={Marca.nombre}
+                      style={styles.logotipo}
+                    />
                     <Text style={styles.lema}>Objetos perdidos del campus</Text>
                   </View>
                 </View>
@@ -101,7 +107,7 @@ function Decoracion() {
 }
 
 const styles = StyleSheet.create({
-  fondo: { flex: 1, overflow: 'hidden', backgroundColor: Marca.colores.primario },
+  fondo: { flex: 1, overflow: 'hidden', backgroundColor: Marca.colores.primarioOscuro },
   areaSegura: { flex: 1 },
   desplazable: { flexGrow: 1, paddingHorizontal: 20, paddingBottom: 32 },
   columna: { width: '100%', maxWidth: 480, alignSelf: 'center', gap: 20 },
@@ -118,7 +124,8 @@ const styles = StyleSheet.create({
   encabezado: { gap: 10 },
   marcas: { flexDirection: 'row', alignItems: 'center', gap: 14, marginBottom: 8 },
   separador: { width: 1, height: 44, backgroundColor: 'rgba(255, 255, 255, 0.35)' },
-  nombreApp: { fontSize: 26, fontWeight: '800', color: Marca.colores.textoSobrePrimario },
+  marcaFindyp: { gap: 2 },
+  logotipo: { width: 128, height: 49 },
   lema: { fontSize: 14, color: Marca.colores.textoSuaveSobrePrimario },
   titulo: {
     fontSize: 30,
@@ -149,8 +156,8 @@ const styles = StyleSheet.create({
     height: 420,
     top: -180,
     right: -160,
-    backgroundColor: Marca.colores.primarioOscuro,
-    opacity: 0.55,
+    backgroundColor: Marca.colores.primario,
+    opacity: 0.6,
   },
   circuloAcento: {
     width: 140,
@@ -158,7 +165,7 @@ const styles = StyleSheet.create({
     top: 90,
     left: -70,
     backgroundColor: Marca.colores.acento,
-    opacity: 0.85,
+    opacity: 0.35,
   },
   circuloPequeno: {
     width: 220,
