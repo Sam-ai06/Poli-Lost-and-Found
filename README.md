@@ -1,56 +1,121 @@
-# Welcome to your Expo app 👋
+# Findyp
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Findyp es una aplicación de objetos perdidos y encontrados para universidades y campus
+universitarios. Permite publicar objetos encontrados, explorarlos en una galería, registrar
+búsquedas de objetos perdidos, consultar posibles coincidencias y gestionar la recuperación y
+entrega de cada objeto.
 
-## Get started
+La identidad visual está centralizada para que otras universidades puedan adaptarla.
 
-1. Install dependencies
+## Tecnologías
 
-   ```bash
-   npm install
-   ```
+- [Expo](https://expo.dev) SDK 58 con React Native 0.88 y React 19 (Android, iOS y web)
+- [Expo Router](https://docs.expo.dev/router/introduction/): navegación basada en archivos
+- TypeScript
+- Supabase (PostgreSQL, Storage y Auth) como backend; la integración está en desarrollo
 
-2. Start the app
+## Requisitos previos
 
-   ```bash
-   npx expo start
-   ```
+- Node.js LTS y npm
+- Git
+- Para probar en un teléfono: la app Expo Go o una development build. Para emuladores: Android
+  Studio o Xcode.
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Instalación
 
 ```bash
-npm run reset-project
+git clone https://github.com/Sam-ai06/Poli-Lost-and-Found.git
+cd Poli-Lost-and-Found
+npm install
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+Para agregar dependencias, usa `npx expo install <paquete>` en lugar de `npm install <paquete>`,
+así se instalan versiones compatibles con el SDK de Expo.
 
-### Other setup steps
+## Variables de entorno
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+Por ahora el proyecto no requiere variables de entorno: la aplicación usa datos ficticios
+locales (ver [Capa de acceso a datos](#capa-de-acceso-a-datos)). Las variables de Supabase se
+documentarán cuando se configure el backend.
 
-## Learn more
+## Ejecución local
 
-To learn more about developing your project with Expo, look at the following resources:
+| Comando | Descripción |
+| --- | --- |
+| `npm start` (equivale a `npx expo start`) | Inicia el servidor de desarrollo de Expo |
+| `npm run web` | Inicia la aplicación en el navegador |
+| `npm run android` | Inicia la aplicación en un emulador o dispositivo Android |
+| `npm run ios` | Inicia la aplicación en el simulador de iOS (requiere macOS) |
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Desde GitHub Codespaces o una red distinta a la del teléfono, usa `npx expo start --tunnel`.
 
-## Join the community
+## Pruebas y verificaciones
 
-Join our community of developers creating universal apps.
+| Comando | Descripción |
+| --- | --- |
+| `npx tsc --noEmit` | Comprobación de tipos de TypeScript |
+| `npm run lint` | Lint con la configuración de Expo (`expo lint`) |
+| `npx expo-doctor` | Diagnóstico de dependencias y configuración de Expo |
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+El proyecto todavía no tiene configurado un framework de pruebas automatizadas, por lo que no
+existe un script `npm test`.
+
+El repositorio aún no incluye configuración de ESLint. Según la documentación de Expo, la primera
+ejecución de `npm run lint` la configura: agrega `eslint` y `eslint-config-expo` a
+`devDependencies` y crea `eslint.config.js`. Ese cambio debe acordarse con el equipo y hacerse en
+su propia rama.
+
+## Estructura del repositorio
+
+```text
+src/
+  app/                  Rutas de Expo Router (cada archivo es una pantalla)
+    (tabs)/             Pestañas: Explorar (galería), Mis reportes y Perfil
+    objeto/[id].tsx     Detalle de un objeto
+    coincidencias/      Coincidencias de una búsqueda
+    publicar.tsx        Publicación de objetos (pendiente)
+    buscar.tsx          Registro de búsquedas (pendiente)
+    recuperacion/       Solicitud de recuperación (pendiente)
+  components/           Componentes reutilizables de interfaz
+  constants/theme.ts    Tokens de diseño; `Marca` define colores y radios de Findyp
+  data/mock/            Datos ficticios en JSON
+  hooks/                Hooks de datos y utilidades
+  services/             Capa de acceso a datos (proveedores)
+  types/findyp.ts       Modelos y enums de dominio
+  utils/                Formato de fechas y etiquetas
+assets/                 Íconos e imágenes (images/mock: fotos de prueba)
+```
+
+## Capa de acceso a datos
+
+Las pantallas no consultan Supabase directamente. Usan los hooks de `src/hooks/use-objetos.ts`,
+que obtienen un `DataProvider` mediante `obtenerProveedorDatos()` (`src/services/index.ts`).
+
+- `MockDataProvider`: lee `src/data/mock/*.json`. Es el proveedor activo. Sus imágenes están en
+  `assets/images/mock` y se referencian como `mock://<clave>` (ver `src/data/mock/imagenes.ts`).
+- `SupabaseDataProvider`: esqueleto pendiente de la configuración de Supabase.
+
+Operaciones disponibles: `listarObjetos(filtros)`, `obtenerObjeto(id)` y
+`obtenerCoincidencias(busquedaId)`. Para cambiar de proveedor, modifica `FUENTE_DATOS` en
+`src/services/index.ts`.
+
+Los modelos de `src/types/findyp.ts` son provisionales hasta que exista `docs/contrato-datos.md`.
+Los campos marcados con `@pendiente` deben validarse con ese contrato; si cambian, se ajustan
+los tipos y `src/services/normalizar.ts`, sin modificar los componentes.
+
+## Personalización para otra universidad
+
+Edita el objeto `Marca` en `src/constants/theme.ts` (nombre, colores y radios). Los lugares de
+hallazgo provienen de los datos, no del código.
+
+## Cómo contribuir
+
+1. Actualiza tu copia local: `git checkout main && git pull`.
+2. Crea una rama por funcionalidad, por ejemplo `git checkout -b feature/nombre-funcionalidad`.
+3. Respeta la división de responsabilidades del equipo y el contrato de datos.
+4. Antes de abrir un pull request, ejecuta `npx tsc --noEmit` y `npm run lint`.
+5. Usa mensajes de commit descriptivos y solicita revisión de al menos un integrante.
+
+## Licencia
+
+Consulta el archivo [LICENSE](LICENSE).

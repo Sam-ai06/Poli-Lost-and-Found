@@ -63,3 +63,49 @@ export const Spacing = {
 
 export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
 export const MaxContentWidth = 800;
+
+/**
+ * Identidad visual de Findyp. Otra universidad puede personalizar la aplicación
+ * cambiando únicamente estos valores.
+ */
+export const Marca = {
+  nombre: 'Findyp',
+  colores: {
+    primario: '#4F46E5',
+    primarioPresionado: '#4338CA',
+    primarioSuave: '#EEF0FF',
+    primarioBorde: '#C7CAF7',
+    texto: '#0F172A',
+    textoSecundario: '#64748B',
+    fondo: '#FFFFFF',
+    fondoPagina: '#F8F9FC',
+    borde: '#E2E8F0',
+    exito: '#15803D',
+    exitoPunto: '#16A34A',
+    exitoSuave: '#DCFCE7',
+    advertencia: '#B45309',
+    advertenciaSuave: '#FEF3C7',
+    neutro: '#475569',
+    neutroSuave: '#F1F5F9',
+    error: '#B91C1C',
+    errorSuave: '#FEE2E2',
+    imagenFondo: '#E8EAF6',
+  },
+  radios: {
+    pequeno: 8,
+    medio: 12,
+    grande: 16,
+    pildora: 999,
+  },
+} as const;
+
+export const SombraTarjeta = Platform.select({
+  web: { boxShadow: '0 1px 3px rgba(15, 23, 42, 0.08)' },
+  default: {
+    shadowColor: '#0F172A',
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+  },
+});

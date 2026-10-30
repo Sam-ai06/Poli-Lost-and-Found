@@ -1,0 +1,26 @@
+[
+  {
+    "id": "coi-001",
+    "busqueda_id": "busqueda-demo",
+    "objeto_id": "obj-001",
+    "nivel_similitud": "alta"
+  },
+  {
+    "id": "coi-002",
+    "busqueda_id": "busqueda-demo",
+    "objeto_id": "obj-010",
+    "nivel_similitud": "media"
+  },
+  {
+    "id": "coi-003",
+    "busqueda_id": "busqueda-demo",
+    "objeto_id": "obj-006",
+    "nivel_similitud": "baja"
+  },
+  {
+    "id": "coi-004",
+    "busqueda_id": "busqueda-demo",
+    "objeto_id": "obj-003",
+    "nivel_similitud": null
+  }
+]
