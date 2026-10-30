@@ -27,13 +27,16 @@ export default function AppTabs() {
           <TabTrigger name="explore" href="/explore" asChild>
             <TabButton>Explore</TabButton>
           </TabTrigger>
+          <TabTrigger name="demo-reportes" href="/demo-reportes" asChild>
+            <TabButton>Demo reportes</TabButton>
+          </TabTrigger>
         </CustomTabList>
       </TabList>
     </Tabs>
   );
 }
 
-export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps) {
+export function TabButton({ children, isFocused, ...props }: Omit<TabTriggerSlotProps, 'ref'>) {
   return (
     <Pressable {...props} style={({ pressed }) => pressed && styles.pressed}>
       <ThemedView
