@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
 
 import { Icono, type NombreIcono } from '@/components/icono';
 import { Marca } from '@/constants/theme';
@@ -10,6 +10,8 @@ interface BotonProps {
   icono?: NombreIcono;
   compacto?: boolean;
   deshabilitado?: boolean;
+  /** Muestra un indicador de progreso y bloquea el botón. */
+  cargando?: boolean;
 }
 
 export function Boton({
@@ -19,6 +21,7 @@ export function Boton({
   icono,
   compacto = false,
   deshabilitado = false,
+  cargando = false,
 }: BotonProps) {
   const esPrimario = variante === 'primario';
   const colorTexto = esPrimario ? Marca.colores.fondo : Marca.colores.primario;
@@ -26,17 +29,21 @@ export function Boton({
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityState={{ disabled: deshabilitado }}
-      disabled={deshabilitado}
+      accessibilityState={{ disabled: deshabilitado || cargando, busy: cargando }}
+      disabled={deshabilitado || cargando}
       onPress={onPress}
       style={({ pressed }) => [
         styles.base,
         compacto && styles.compacto,
         esPrimario ? styles.primario : styles.secundario,
         pressed && (esPrimario ? styles.primarioPresionado : styles.secundarioPresionado),
-        deshabilitado && styles.deshabilitado,
+        deshabilitado && !cargando && styles.deshabilitado,
       ]}>
-      {icono ? <Icono nombre={icono} tamano={compacto ? 18 : 22} color={colorTexto} /> : null}
+      {cargando ? (
+        <ActivityIndicator color={colorTexto} />
+      ) : icono ? (
+        <Icono nombre={icono} tamano={compacto ? 18 : 22} color={colorTexto} />
+      ) : null}
       <Text style={[styles.texto, compacto && styles.textoCompacto, { color: colorTexto }]}>
         {etiqueta}
       </Text>

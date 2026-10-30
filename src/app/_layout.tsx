@@ -2,6 +2,7 @@ import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
+import { SesionProvider } from '@/features/autenticacion';
 import { ReportesProvider } from '@/features/reportes';
 import { servicioDemo } from '@/features/reportes/demo/environment';
 import { seleccionarImagen } from '@/features/reportes/storage/images';
@@ -20,10 +21,12 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <SesionProvider>
       <ReportesProvider servicios={servicioDemo} demo={servicioDemo} imagenes={imagenes} navegacion={navegacionReportes}>
       <AnimatedSplashOverlay />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="acceso" />
         <Stack.Screen name="objeto/[id]" />
         <Stack.Screen name="coincidencias/[busquedaId]" />
         <Stack.Screen name="publicar" />
@@ -31,6 +34,7 @@ export default function RootLayout() {
         <Stack.Screen name="recuperacion/[objetoId]" />
       </Stack>
       </ReportesProvider>
+      </SesionProvider>
     </ThemeProvider>
   );
 }
