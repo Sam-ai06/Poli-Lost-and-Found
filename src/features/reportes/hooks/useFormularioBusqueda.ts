@@ -5,7 +5,7 @@ import { useOperacion } from './useOperacion';
 
 export function useFormularioBusqueda(id?: string) {
   const { servicios: reportes, navegacion, notificarCambio } = useReportes();
-  const [datos, setDatos] = useState<NuevaBusqueda>({ categoria: 'otros', descripcion: '', color: null, fecha_perdida: null, lugar_aproximado: null, imagen_url: null });
+  const [datos, setDatos] = useState<NuevaBusqueda>({ categoria: 'otros', descripcion: '', color: null, fecha_perdida: null, lugar_aproximado: null, imagen_url: null, ubicacion_perdida: null });
   const [listo, setListo] = useState(!id);
   const { ocupado, error, ejecutar } = useOperacion();
   const actualizar = <K extends keyof NuevaBusqueda>(k: K, v: NuevaBusqueda[K]) => setDatos(d => ({ ...d, [k]: v }));

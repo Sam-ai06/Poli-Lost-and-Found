@@ -26,11 +26,13 @@ test('SQLite real: cerrar conexión y reabrir conserva reportes, imágenes y usu
     let s = servicio();
     db.exec("CREATE TABLE otro_modulo (valor TEXT); INSERT INTO otro_modulo VALUES ('conservar')");
     await s.cambiarUsuario('diego');
-    const b = await s.crearBusqueda({ categoria: 'otros', descripcion: 'Cuaderno', color: null, fecha_perdida: fechaHoy(), lugar_aproximado: 'FIEC', imagen_url: 'file:///documents/imagen-persistente.jpg' });
+    const ubicacion = { latitud: -2.1455, longitud: -79.966 };
+    const b = await s.crearBusqueda({ categoria: 'otros', descripcion: 'Cuaderno', color: null, fecha_perdida: fechaHoy(), lugar_aproximado: 'FIEC', imagen_url: 'file:///documents/imagen-persistente.jpg', ubicacion_perdida: ubicacion });
     db.close(); s = servicio();
     assert.equal((await s.usuarioActual()).id, 'diego');
     assert.equal((await s.listarMisBusquedas())[0].id, b.id);
     assert.equal((await s.listarMisBusquedas())[0].imagen_url, 'file:///documents/imagen-persistente.jpg');
+    assert.deepEqual((await s.listarMisBusquedas())[0].ubicacion_perdida, ubicacion);
     await s.cambiarUsuario('ana');
     const vinculada = await s.crearBusqueda({ categoria: 'llaves', descripcion: 'Llaves con tortuga', color: null, fecha_perdida: null, lugar_aproximado: null, imagen_url: null });
     const r = await s.crearReclamacion({ objeto_id: 'demo-llaves', busqueda_id: vinculada.id, detalle_verificacion: 'Llavero de tortuga' });

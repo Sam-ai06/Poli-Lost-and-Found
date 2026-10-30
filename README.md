@@ -123,6 +123,11 @@ sus utilidades. Los datos reales, autenticación, coincidencias y permisos del s
 integración. Consulta [módulo de reportes](docs/modulo-reportes.md) y
 [guía de integración](docs/integracion-reportes.md).
 
+**Buscar mi objeto** integra el mapa de la rama `danna` para marcar y guardar dónde se perdió el
+objeto. Leaflet se empaqueta localmente; las calles requieren conexión. La ubicación actual solo
+centra el mapa y no reemplaza el punto elegido. Consulta [integración del mapa](docs/integracion-mapa.md)
+y [verificación general](docs/verificacion-integracion-general.md) antes del pull final.
+
 ## Personalización para otra universidad
 
 Edita el objeto `Marca` en `src/constants/theme.ts` (nombre, colores y radios). Los lugares de

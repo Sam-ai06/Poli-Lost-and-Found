@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapa de objetos perdidos · ESPOL</title>
+  <link rel="stylesheet" href="./leaflet/leaflet.css">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; color: #0F172A; background: #F8F9FC; }
+    #map { height: 550px; width: 100%; border-radius: 12px; border: 1px solid #E2E8F0; }
+    button { background: #4F46E5; color: white; padding: 12px 20px; border: 0; border-radius: 12px; cursor: pointer; }
+    .findyp-pin { display: block; width: 24px; height: 24px; background: #4F46E5; border: 3px solid white; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 0 1px 6px #475569; }
+  </style>
+</head>
+<body>
+  <h2>Mapa de objetos perdidos · ESPOL</h2>
+  <button id="btnUbicacion">Mi ubicación actual</button>
+  <p id="ubicacionSeleccionada">Toca el mapa para indicar dónde perdiste el objeto.</p>
+  <input type="hidden" id="latitud"><input type="hidden" id="longitud">
+  <div id="map"></div>
+  <script src="./leaflet/leaflet.js"></script>
+  <script src="./mapaespol.js"></script>
+</body>
+</html>

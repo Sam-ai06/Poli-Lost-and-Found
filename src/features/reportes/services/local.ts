@@ -1,6 +1,7 @@
 import type { Usuario, Objeto, Busqueda, Reclamacion, ReclamacionResumen, EstadoLocal, AlmacenReportes, ServicioReportes, ControlesDemo } from '../types/index.ts';
 import { copia, exigir, objetoPublico, validarObjeto, validarBusqueda, validarEstado } from '../domain/index.ts';
 import { registrarReclamacion, resolverSolicitud, entregarObjeto } from '../domain/reclamaciones.ts';
+import { normalizarCoordenadas } from '../../ubicacion/domain.ts';
 export function crearServicioLocal(almacen: AlmacenReportes, opciones: { usuarios: readonly Usuario[]; inicial: () => EstadoLocal; migrar?: (estado: EstadoLocal) => boolean }): ServicioReportes & ControlesDemo {
   const { usuarios, inicial, migrar } = opciones;
   let cola: Promise<unknown> = Promise.resolve();
@@ -44,9 +45,9 @@ export function crearServicioLocal(almacen: AlmacenReportes, opciones: { usuario
       Object.assign(o, actualizado); s.privados[id] = { contacto: datos.modalidad_entrega === 'contacto' ? datos.contacto : null, caracteristica_reservada: datos.caracteristica_reservada };
       return propio(s, o);
     }, true),
-    crearBusqueda: datos => operar(s => { validarBusqueda(datos); const b: Busqueda = { categoria: datos.categoria, descripcion: datos.descripcion, color: datos.color, fecha_perdida: datos.fecha_perdida, lugar_aproximado: datos.lugar_aproximado, imagen_url: datos.imagen_url, id: id(), solicitante_id: s.usuario_id, estado: 'activa', creado_en: new Date().toISOString() }; s.busquedas.unshift(b); return b; }, true),
+    crearBusqueda: datos => operar(s => { validarBusqueda(datos); const b: Busqueda = { categoria: datos.categoria, descripcion: datos.descripcion, color: datos.color, fecha_perdida: datos.fecha_perdida, lugar_aproximado: datos.lugar_aproximado, imagen_url: datos.imagen_url, ubicacion_perdida: normalizarCoordenadas(datos.ubicacion_perdida), id: id(), solicitante_id: s.usuario_id, estado: 'activa', creado_en: new Date().toISOString() }; s.busquedas.unshift(b); return b; }, true),
     listarMisBusquedas: () => operar(s => s.busquedas.filter(b => b.solicitante_id === s.usuario_id)),
-    actualizarBusqueda: (id, datos) => operar(s => { validarBusqueda(datos); const b = buscarBusqueda(s, id); exigir(b.estado === 'activa', 'Solo puedes editar búsquedas activas.'); Object.assign(b, { categoria: datos.categoria, descripcion: datos.descripcion, color: datos.color, fecha_perdida: datos.fecha_perdida, lugar_aproximado: datos.lugar_aproximado, imagen_url: datos.imagen_url }); return b; }, true),
+    actualizarBusqueda: (id, datos) => operar(s => { validarBusqueda(datos); const b = buscarBusqueda(s, id); exigir(b.estado === 'activa', 'Solo puedes editar búsquedas activas.'); Object.assign(b, { categoria: datos.categoria, descripcion: datos.descripcion, color: datos.color, fecha_perdida: datos.fecha_perdida, lugar_aproximado: datos.lugar_aproximado, imagen_url: datos.imagen_url, ubicacion_perdida: datos.ubicacion_perdida === undefined ? b.ubicacion_perdida : normalizarCoordenadas(datos.ubicacion_perdida) }); return b; }, true),
     cerrarBusqueda: id => operar(s => { const b = buscarBusqueda(s, id); exigir(b.estado === 'activa', 'La búsqueda ya está cerrada o resuelta.'); b.estado = 'cerrada'; }, true),
     // DEMO: replace with the matching module/API. Category filtering is NOT a real match.
     solicitarCoincidencias: id => operar(s => { const b = buscarBusqueda(s, id); return s.objetos.filter(o => o.publicador_id !== s.usuario_id && o.estado === 'disponible' && o.categoria === b.categoria).map(objetoPublico); }),

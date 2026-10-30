@@ -66,6 +66,8 @@ El contrato incluye crear/listar/actualizar objetos y búsquedas; cerrar búsque
 
 `solicitarCoincidencias(busquedaId)` es el punto de integración con el módulo del compañero. La implementación local está marcada `DEMO`: filtra objetos disponibles de otros usuarios por categoría. No ejecuta Gemma ni pretende ser un motor real de coincidencias.
 
+La búsqueda ahora puede incluir `ubicacion_perdida: { latitud, longitud } | null`, seleccionada con el módulo de Danna. La migración de snapshots antiguos y la semántica de edición se detallan en [integracion-mapa.md](./integracion-mapa.md). Este campo no cambia el filtro demo ni está admitido por la RPC remota actual: su soporte debe acordarse antes de sustituir el servicio local por HTTP.
+
 Las imágenes se obtienen mediante `ImagenesReportes`. El adaptador móvil copia la selección a documentos de la app antes de devolverla. El adaptador HTTP deberá subir ese archivo y sustituir su URI local por una URL del servidor. Una cancelación devuelve `null`; un permiso denegado o un fallo de copia rechaza la promesa y conserva los datos del formulario.
 
 ## Privacidad y consistencia

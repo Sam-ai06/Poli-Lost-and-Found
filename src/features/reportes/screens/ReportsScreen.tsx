@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Alert, Image } from 'react-native';
 import { ImagenObjeto } from '@/components/imagen-objeto';
+import { textoCoordenadas } from '@/features/ubicacion';
 import { etiquetas, type Busqueda } from '../domain';
 import { useReportes } from '../services/ReportesProvider';
 import { useMisReportes } from '../hooks/useMisReportes';
@@ -36,6 +37,7 @@ export default function ReportsScreen() {
       <Texto>{etiquetas[b.categoria]} · {b.estado}</Texto><Texto>{b.descripcion}</Texto>
       <Texto secundario>{b.color ? `Color: ${b.color}` : 'Sin color indicado'} · {b.fecha_perdida ?? 'Fecha desconocida'}</Texto>
       <Texto secundario>{b.lugar_aproximado ?? 'Sin lugar aproximado'}</Texto>
+      {b.ubicacion_perdida && <Texto secundario>Ubicación en el mapa: {textoCoordenadas(b.ubicacion_perdida)}</Texto>}
       {b.estado === 'activa' && <>
         <Boton secundario titulo="Editar búsqueda" disabled={ocupado} onPress={() => navegacion.buscar(b.id)} />
         <Boton secundario titulo="Ver posibles coincidencias" disabled={ocupado} onPress={() => navegacion.coincidencias(b.id)} />
