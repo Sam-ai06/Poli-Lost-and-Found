@@ -31,7 +31,7 @@ Integración basada en la [guía oficial de Supabase para Expo](https://supabase
 
 ## Requisitos previos
 
-- Node.js LTS y npm
+- Node.js 24 y npm (`npm run test:reportes` requiere Node 24)
 - Git
 - Para probar en un teléfono: la app Expo Go o una development build. Para emuladores: Android
   Studio o Xcode.
@@ -64,37 +64,67 @@ de entorno. Para usar el cliente Supabase o las pruebas del backend, copia `.env
 
 Desde GitHub Codespaces o una red distinta a la del teléfono, usa `npx expo start --tunnel`.
 
+No ejecutes `npm run reset-project`: es un script de la plantilla de Expo que mueve el código de
+`src/app` a otra carpeta.
+
+### Probar la aplicación
+
+1. Ejecuta `npm install` y luego `npm run web`.
+2. Abre `http://localhost:8081`. En GitHub Codespaces, abre la pestaña **Puertos** y usa la
+   dirección reenviada del puerto 8081. La primera carga puede tardar mientras Metro empaqueta.
+3. Recorrido sugerido:
+   - **Explorar**: galería con búsqueda por texto, categorías y el panel de filtros (estado, lugar
+     y fecha). **Ver detalle** abre la información completa del objeto.
+   - **Buscar mi objeto** y **Publicar objeto**: formularios del módulo de reportes.
+   - `/coincidencias/busqueda-demo`: coincidencias de ejemplo con su nivel de similitud.
+   - **Mis reportes**: publicaciones y búsquedas propias, reclamaciones y **Utilidades de
+     demostración**, que permiten cambiar entre los dos usuarios de prueba.
+
+En web, los reportes creados se conservan solo durante la sesión del navegador; en Android e iOS
+se guardan en SQLite. La aplicación funciona con datos de prueba y no necesita `.env.local`.
+
 ## Pruebas y verificaciones
 
 | Comando | Descripción |
 | --- | --- |
-| `npx tsc --noEmit` | Comprobación de tipos de TypeScript |
-| `npm run lint` | Lint con la configuración de Expo (`expo lint`) |
+| `npm run typecheck` (equivale a `npx tsc --noEmit`) | Comprobación de tipos de TypeScript |
+| `npm run lint` | Lint con la configuración de Expo incluida en `eslint.config.js` |
+| `npm run test:reportes` | Pruebas del módulo de reportes y de su integración con el catálogo (Node 24) |
 | `npx expo-doctor` | Diagnóstico de dependencias y configuración de Expo |
+| `node --env-file=.env.local scripts/check-supabase.mjs` | Comprueba la conexión con Supabase |
+| `node --env-file=.env.local scripts/test-api.mjs` | Prueba la API desplegada en Supabase |
 
-`npm run test:reportes` ejecuta las pruebas del módulo y su integración con el catálogo. Requiere
-Node 24. La configuración de ESLint ya está incluida en el repositorio.
+Los dos últimos comandos requieren `.env.local` y se conectan al proyecto real de Supabase.
+Antes de ejecutar `scripts/test-api.mjs`, revisa la sección de pruebas de
+[la documentación del backend](supabase/README.md).
 
 ## Estructura del repositorio
 
 ```text
 src/
-  app/                  Rutas de Expo Router (cada archivo es una pantalla)
-    (tabs)/             Pestañas: Explorar (galería), Mis reportes y Perfil
-    objeto/[id].tsx     Detalle de un objeto
-    coincidencias/      Coincidencias de una búsqueda
-    publicar.tsx        Publicación de objetos
-    buscar.tsx          Registro de búsquedas
-    recuperacion/       Solicitud de recuperación
-    demo-reportes/      Coincidencias locales, reclamaciones y utilidades demo
-  components/           Componentes reutilizables de interfaz
-  constants/theme.ts    Tokens de diseño; `Marca` define colores y radios de Findyp
-  data/mock/            Datos ficticios en JSON
-  hooks/                Hooks de datos y utilidades
-  services/             Capa de acceso a datos (proveedores)
-  types/findyp.ts       Modelos y enums de dominio
-  utils/                Formato de fechas y etiquetas
-assets/                 Íconos e imágenes (images/mock: fotos de prueba)
+  app/                    Rutas de Expo Router (cada archivo es una pantalla)
+    (tabs)/               Pestañas: Explorar (galería), Mis reportes y Perfil
+    objeto/[id].tsx       Detalle de un objeto
+    coincidencias/        Coincidencias de una búsqueda
+    publicar.tsx          Publicación de objetos
+    buscar.tsx            Registro de búsquedas
+    recuperacion/         Solicitud de recuperación
+    demo-reportes/        Coincidencias locales, reclamaciones y utilidades demo
+  components/             Componentes reutilizables de interfaz
+  constants/theme.ts      Tokens de diseño; `Marca` define colores y radios de Findyp
+  data/mock/              Datos ficticios en JSON e imágenes de prueba
+  features/reportes/      Módulo de reportes: pantallas, hooks, dominio y almacenamiento local
+  hooks/                  Hooks de datos y utilidades
+  integrations/           Integración del catálogo con los reportes de demostración
+  lib/                    Cliente de Supabase y almacenamiento de sesión
+  services/               Capa de acceso a datos (proveedores)
+  types/                  Modelos y enums de dominio
+  utils/                  Formato de fechas y etiquetas
+assets/                   Íconos e imágenes (images/mock: fotos de prueba)
+docs/                     Documentación del módulo de reportes y su integración
+scripts/                  Comprobaciones de Supabase y pruebas de la API
+supabase/                 Función de la API, SQL del backend y su documentación
+tests/                    Pruebas automatizadas (`node --test`)
 ```
 
 ## Capa de acceso a datos
