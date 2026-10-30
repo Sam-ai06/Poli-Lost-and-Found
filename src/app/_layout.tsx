@@ -1,10 +1,14 @@
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 
-import '@/lib/supabase';
-
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
+import { ReportesProvider } from '@/features/reportes';
+import { servicioDemo } from '@/features/reportes/demo/environment';
+import { seleccionarImagen } from '@/features/reportes/storage/images';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { navegacionReportes } from '@/integrations/reportes-demo';
+
+const imagenes = { seleccionar: seleccionarImagen };
 
 SplashScreen.preventAutoHideAsync();
 
@@ -16,6 +20,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <ReportesProvider servicios={servicioDemo} demo={servicioDemo} imagenes={imagenes} navegacion={navegacionReportes}>
       <AnimatedSplashOverlay />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
@@ -25,6 +30,7 @@ export default function RootLayout() {
         <Stack.Screen name="buscar" />
         <Stack.Screen name="recuperacion/[objetoId]" />
       </Stack>
+      </ReportesProvider>
     </ThemeProvider>
   );
 }

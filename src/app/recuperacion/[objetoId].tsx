@@ -1,13 +1,7 @@
-import { ModuloPendiente } from '@/components/modulo-pendiente';
+import { useLocalSearchParams } from 'expo-router';
+import { RecoveryScreen } from '@/features/reportes';
 
-/** Punto de integración: solicitud de recuperación y entrega (Participante 2). */
 export default function RecuperacionScreen() {
-  return (
-    <ModuloPendiente
-      titulo="Solicitar recuperación"
-      regresarA=""
-      responsable="Participante 2"
-      descripcion="Aquí se integrará el flujo para solicitar la recuperación del objeto. El id del objeto llega como parámetro objetoId."
-    />
-  );
+  const { objetoId, busquedaId } = useLocalSearchParams<{ objetoId: string; busquedaId?: string }>();
+  return <RecoveryScreen key={`${objetoId}:${busquedaId ?? ''}`} objetoId={objetoId} busquedaId={busquedaId} />;
 }

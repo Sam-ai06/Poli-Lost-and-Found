@@ -5,6 +5,7 @@ import type { CoincidenciaDetallada, FiltrosObjetos, ObjetoEncontrado } from '@/
 import type { DataProvider } from './data-provider';
 import { filtrarObjetos } from './filtrar-objetos';
 import { normalizarNivel, normalizarObjeto } from './normalizar';
+import { servicioDemo } from '@/features/reportes/demo/environment';
 
 /** Latencia simulada para poder visualizar los estados de carga. */
 const LATENCIA_MS = 300;
@@ -17,12 +18,15 @@ function esperar<T>(valor: T): Promise<T> {
 export class MockDataProvider implements DataProvider {
   private readonly objetos: ObjetoEncontrado[] = objetosJson.map(normalizarObjeto);
 
-  listarObjetos(filtros?: FiltrosObjetos): Promise<ObjetoEncontrado[]> {
-    return esperar(filtrarObjetos(this.objetos, filtros));
+  async listarObjetos(filtros?: FiltrosObjetos): Promise<ObjetoEncontrado[]> {
+    const locales = await servicioDemo.listarTodosObjetosPublicos();
+    const idsLocales = new Set(locales.map(o => o.id));
+    return esperar(filtrarObjetos([...locales, ...this.objetos.filter(o => !idsLocales.has(o.id))], filtros));
   }
 
-  obtenerObjeto(id: string): Promise<ObjetoEncontrado | null> {
-    return esperar(this.objetos.find((objeto) => objeto.id === id) ?? null);
+  async obtenerObjeto(id: string): Promise<ObjetoEncontrado | null> {
+    const locales = await servicioDemo.listarTodosObjetosPublicos();
+    return esperar(locales.find(o => o.id === id) ?? this.objetos.find((objeto) => objeto.id === id) ?? null);
   }
 
   obtenerCoincidencias(busquedaId: string): Promise<CoincidenciaDetallada[]> {

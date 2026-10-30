@@ -18,7 +18,7 @@ El proyecto está conectado a `poli-lost-and-found` en Supabase.
 - Las sesiones se conservan con el almacenamiento local de Expo en móvil y el del navegador en web.
 - Comprueba la API con `node --env-file=.env.local scripts/check-supabase.mjs`.
 
-La base de datos incluye tablas de objetos, búsquedas y reclamaciones. La [documentación del backend](supabase/README.md) describe las rutas disponibles, la autenticación y sus formatos. La aplicación todavía no incluye pantallas de autenticación ni de gestión de estos datos.
+La base de datos incluye tablas de objetos, búsquedas y reclamaciones. La [documentación del backend](supabase/README.md) describe las rutas disponibles, la autenticación y sus formatos. La aplicación todavía no incluye pantallas de autenticación ni conecta los reportes locales al servidor.
 
 Integración basada en la [guía oficial de Supabase para Expo](https://supabase.com/docs/guides/getting-started/quickstarts/expo-react-native).
 
@@ -49,9 +49,9 @@ así se instalan versiones compatibles con el SDK de Expo.
 
 ## Variables de entorno
 
-Por ahora el proyecto no requiere variables de entorno: la aplicación usa datos ficticios
-locales (ver [Capa de acceso a datos](#capa-de-acceso-a-datos)). Las variables de Supabase se
-documentarán cuando se configure el backend.
+La demostración de la galería y los reportes funciona con datos ficticios locales sin variables
+de entorno. Para usar el cliente Supabase o las pruebas del backend, copia `.env.example` a
+`.env.local` y configura la URL y la clave pública indicadas en [Supabase](#supabase).
 
 ## Ejecución local
 
@@ -72,13 +72,8 @@ Desde GitHub Codespaces o una red distinta a la del teléfono, usa `npx expo sta
 | `npm run lint` | Lint con la configuración de Expo (`expo lint`) |
 | `npx expo-doctor` | Diagnóstico de dependencias y configuración de Expo |
 
-El proyecto todavía no tiene configurado un framework de pruebas automatizadas, por lo que no
-existe un script `npm test`.
-
-El repositorio aún no incluye configuración de ESLint. Según la documentación de Expo, la primera
-ejecución de `npm run lint` la configura: agrega `eslint` y `eslint-config-expo` a
-`devDependencies` y crea `eslint.config.js`. Ese cambio debe acordarse con el equipo y hacerse en
-su propia rama.
+`npm run test:reportes` ejecuta las pruebas del módulo y su integración con el catálogo. Requiere
+Node 24. La configuración de ESLint ya está incluida en el repositorio.
 
 ## Estructura del repositorio
 
@@ -88,9 +83,10 @@ src/
     (tabs)/             Pestañas: Explorar (galería), Mis reportes y Perfil
     objeto/[id].tsx     Detalle de un objeto
     coincidencias/      Coincidencias de una búsqueda
-    publicar.tsx        Publicación de objetos (pendiente)
-    buscar.tsx          Registro de búsquedas (pendiente)
-    recuperacion/       Solicitud de recuperación (pendiente)
+    publicar.tsx        Publicación de objetos
+    buscar.tsx          Registro de búsquedas
+    recuperacion/       Solicitud de recuperación
+    demo-reportes/      Coincidencias locales, reclamaciones y utilidades demo
   components/           Componentes reutilizables de interfaz
   constants/theme.ts    Tokens de diseño; `Marca` define colores y radios de Findyp
   data/mock/            Datos ficticios en JSON
@@ -106,8 +102,11 @@ assets/                 Íconos e imágenes (images/mock: fotos de prueba)
 Las pantallas no consultan Supabase directamente. Usan los hooks de `src/hooks/use-objetos.ts`,
 que obtienen un `DataProvider` mediante `obtenerProveedorDatos()` (`src/services/index.ts`).
 
-- `MockDataProvider`: lee `src/data/mock/*.json`. Es el proveedor activo. Sus imágenes están en
-  `assets/images/mock` y se referencian como `mock://<clave>` (ver `src/data/mock/imagenes.ts`).
+- `MockDataProvider`: combina `src/data/mock/*.json` con los reportes públicos del almacenamiento
+  local. Es el proveedor activo. Sus imágenes están en `assets/images/mock` y se referencian como
+  `mock://<clave>` (ver `src/data/mock/imagenes.ts`). Los objetos disponibles del catálogo se
+  incorporan una sola vez a los datos de demostración; los que ya aparecen como entregados o en
+  recuperación siguen siendo solo lectura hasta contar con su historial real.
 - `SupabaseDataProvider`: esqueleto pendiente de la configuración de Supabase.
 
 Operaciones disponibles: `listarObjetos(filtros)`, `obtenerObjeto(id)` y
@@ -117,6 +116,12 @@ Operaciones disponibles: `listarObjetos(filtros)`, `obtenerObjeto(id)` y
 Los modelos de `src/types/findyp.ts` son provisionales hasta que exista `docs/contrato-datos.md`.
 Los campos marcados con `@pendiente` deben validarse con ese contrato; si cambian, se ajustan
 los tipos y `src/services/normalizar.ts`, sin modificar los componentes.
+
+Los formularios y reclamaciones usan el adaptador local en `src/features/reportes`, con SQLite en
+Android/iOS. La pestaña **Mis reportes** permite cambiar entre los dos usuarios de demostración desde
+sus utilidades. Los datos reales, autenticación, coincidencias y permisos del servidor aún requieren
+integración. Consulta [módulo de reportes](docs/modulo-reportes.md) y
+[guía de integración](docs/integracion-reportes.md).
 
 ## Personalización para otra universidad
 
