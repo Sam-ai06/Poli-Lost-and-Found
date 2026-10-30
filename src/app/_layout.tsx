@@ -4,7 +4,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import { SesionProvider } from '@/features/autenticacion';
 import { ReportesProvider } from '@/features/reportes';
-import { servicioDemo } from '@/features/reportes/demo/environment';
+import { servicioSupabase } from '@/features/reportes/services/supabase';
+import { MigracionReportes } from '@/features/reportes/services/MigracionReportes';
 import { seleccionarImagen } from '@/features/reportes/storage/images';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { navegacionReportes } from '@/integrations/reportes-demo';
@@ -22,8 +23,9 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <SesionProvider>
-      <ReportesProvider servicios={servicioDemo} demo={servicioDemo} imagenes={imagenes} navegacion={navegacionReportes}>
       <AnimatedSplashOverlay />
+      <MigracionReportes>
+      <ReportesProvider servicios={servicioSupabase} imagenes={imagenes} navegacion={navegacionReportes}>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
           <Stack.Screen name="acceso" />
@@ -34,6 +36,7 @@ export default function RootLayout() {
         <Stack.Screen name="recuperacion/[objetoId]" />
       </Stack>
       </ReportesProvider>
+      </MigracionReportes>
       </SesionProvider>
     </ThemeProvider>
   );

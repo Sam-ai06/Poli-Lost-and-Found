@@ -1,3 +1,6 @@
+import * as ImagePicker from 'expo-image-picker';
+
 export async function seleccionarImagen(): Promise<string | null> {
-  throw new Error('La selección y conservación de fotos está disponible en Android/iOS.');
+  const resultado = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 0.8 });
+  return resultado.canceled ? null : resultado.assets[0]?.uri ?? null;
 }

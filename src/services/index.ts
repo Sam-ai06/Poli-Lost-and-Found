@@ -6,8 +6,8 @@ export type { DataProvider } from './data-provider';
 
 type FuenteDatos = 'mock' | 'supabase';
 
-/** Cambiar a 'supabase' cuando el Participante 3 complete la configuración. */
-const FUENTE_DATOS: FuenteDatos = 'mock';
+/** La galería consulta la misma base que los formularios. */
+const FUENTE_DATOS: FuenteDatos = 'supabase';
 
 const proveedores: Record<FuenteDatos, () => DataProvider> = {
   mock: () => new MockDataProvider(),

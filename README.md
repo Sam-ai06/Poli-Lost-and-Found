@@ -4,9 +4,9 @@ Findyp es una aplicación multiplataforma diseñada para facilitar la búsqueda,
 
 La plataforma permite a los estudiantes registrar objetos encontrados, explorar publicaciones mediante filtros, reportar pertenencias extraviadas y consultar posibles coincidencias entre objetos perdidos y encontrados. Incorpora geolocalización mediante mapas interactivos para identificar dónde se extravió un objeto, además de un módulo para gestionar reportes y solicitudes de recuperación.
 
-Desarrollada con **React Native, Expo y TypeScript**, Findyp está diseñada para funcionar en dispositivos móviles y navegadores web. Su arquitectura contempla **Supabase** para la gestión de datos, autenticación y almacenamiento, con una integración al servidor todavía en desarrollo.
+Desarrollada con **React Native, Expo y TypeScript**, Findyp está diseñada para funcionar en dispositivos móviles y navegadores web. Utiliza **Supabase** para la gestión de datos, autenticación y almacenamiento de imágenes.
 
-Actualmente, el MVP permite demostrar los principales flujos de la aplicación utilizando datos de prueba y almacenamiento local. El proyecto busca ofrecer una solución adaptable a diferentes universidades, promoviendo la colaboración y facilitando la recuperación de pertenencias dentro de la comunidad estudiantil.
+El catálogo y los reportes utilizan la base conectada. Las posibles coincidencias se filtran por categoría; todavía no hay un motor de comparación automática.
 
 
 ## Tecnologías utilizadas
@@ -21,8 +21,7 @@ Actualmente, el MVP permite demostrar los principales flujos de la aplicación u
 - **Lenguajes:** TypeScript y JavaScript.
 - **Aplicación:** React Native, React, Expo y Expo Router, con soporte para Android, iOS y web.
 - **Mapas:** Leaflet para selección de ubicaciones.
-- **Persistencia de demostración:** SQLite en dispositivos móviles y almacenamiento temporal en web.
-- **Backend:** Supabase (PostgreSQL, Auth y Storage); conexión con los flujos de usuario todavía en desarrollo.
+- **Backend:** Supabase (PostgreSQL, Auth y Storage); SQLite conserva los reportes anteriores a la integración para su migración.
 
 ## Funcionalidades del MVP
 
@@ -36,7 +35,7 @@ Actualmente, el MVP permite demostrar los principales flujos de la aplicación u
 - Formulario para **publicar un objeto encontrado**.
 - Formulario para **registrar la búsqueda de un objeto perdido**.
 - Consulta de publicaciones propias desde **Mis reportes**.
-- Datos guardados localmente en esta etapa del MVP: SQLite en Android/iOS y durante la sesión en web.
+- Objetos y búsquedas guardados en Supabase para el usuario autenticado.
 
 ### 📍 Indicar la ubicación en el mapa
 - Mapa interactivo con Leaflet para marcar dónde se perdió un objeto.
@@ -45,26 +44,26 @@ Actualmente, el MVP permite demostrar los principales flujos de la aplicación u
 
 ### 🧩 Consultar posibles coincidencias
 - Pantalla de coincidencias con niveles de similitud entre búsquedas y objetos.
-- En el MVP se muestran **coincidencias de demostración**; el procesamiento y la sincronización de datos reales están pendientes de integración.
+- Se muestran objetos reales disponibles de la misma categoría; el procesamiento automático de similitud está pendiente.
 
 ### 🤝 Gestionar recuperación y reclamaciones
 - Flujo de solicitud de recuperación de objetos.
 - Visualización de reportes y reclamaciones desde la aplicación.
-- Utilidades de demostración para alternar entre usuarios de prueba.
+- Los participantes autorizados pueden revisar y gestionar las solicitudes.
 
 ## Estado del desarrollo
 
 | Módulo | Estado actual |
 | --- | --- |
-| Galería, detalles y filtros | ✅ Disponible en demo |
-| Formularios de objetos perdidos y encontrados | ✅ Disponible en demo |
+| Galería, detalles y filtros | ✅ Datos de Supabase |
+| Formularios de objetos perdidos y encontrados | ✅ Datos de Supabase |
 | Selección de ubicación en mapa | ✅ Integrado |
-| Mis reportes y reclamaciones | ✅ Funcional con datos locales |
-| Coincidencias | 🧪 Ejemplos de demostración |
-| Base de datos y API con Supabase | 🚧 Backend preparado; integración parcial |
-| Inicio de sesión y sincronización real | ⏳ Pendiente |
+| Mis reportes y reclamaciones | ✅ Supabase |
+| Coincidencias | 🧪 Filtro por categoría |
+| Base de datos, imágenes y API | ✅ Supabase |
+| Registro e inicio de sesión | ✅ Supabase Auth |
 
-> **Nota:** el MVP puede probarse sin conectarse a Supabase mediante datos ficticios. No se debe confundir la demostración local con un servicio de recuperación de objetos ya desplegado para usuarios reales.
+Los registros locales anteriores se copian a la primera cuenta que inicie sesión en ese dispositivo. Los ejemplos no se publican. Las reclamaciones de demostración se conservan en un respaldo privado porque sus usuarios ficticios no se pueden convertir en cuentas reales automáticamente.
 
 ## Ejecutar localmente
 
@@ -74,6 +73,7 @@ Actualmente, el MVP permite demostrar los principales flujos de la aplicación u
 git clone https://github.com/Sam-ai06/Poli-Lost-and-Found.git
 cd Poli-Lost-and-Found
 npm install
+# Copia .env.example a .env.local y configura la URL y la clave pública de Supabase.
 npm run web
 ```
 

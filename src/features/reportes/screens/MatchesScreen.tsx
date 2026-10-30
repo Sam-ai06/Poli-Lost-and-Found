@@ -15,7 +15,7 @@ export default function MatchesScreen({ id }: { id: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   return <Pagina titulo="Búsqueda guardada">
-    <Texto secundario>Demostración: estos objetos comparten la categoría de tu búsqueda. El módulo de coincidencias se conectará después.</Texto>
+    <Texto secundario>Estos objetos disponibles comparten la categoría de tu búsqueda.</Texto>
     <ErrorMensaje error={error} />{ocupado && <Cargando />}
     {error.length > 0 && <Boton titulo="Reintentar coincidencias" onPress={() => void cargar()} disabled={ocupado} />}
     {listo && objetos.length === 0 && <Tarjeta><Texto>No hay objetos de esa categoría disponibles por ahora.</Texto><Texto secundario>Tu búsqueda quedó guardada en Mis reportes.</Texto></Tarjeta>}

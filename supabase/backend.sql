@@ -88,6 +88,10 @@ begin
       null;
     elsif estado_nuevo = 'entregada' and reclamo.estado = 'aprobada' and objeto.estado = 'en_recuperacion' then
       update public.objetos set estado = 'entregado', actualizado_en = now() where id = objeto.id;
+      update public.busquedas set estado = 'resuelta'
+        where id = reclamo.busqueda_id and usuario_id = reclamo.solicitante_id and estado = 'activa';
+      update public.reclamaciones set estado = 'rechazada', resuelto_en = now()
+        where objeto_id = objeto.id and id <> reclamo.id and estado = 'pendiente';
     else
       raise sqlstate 'PT409' using message = 'La transición de estado no está permitida.';
     end if;

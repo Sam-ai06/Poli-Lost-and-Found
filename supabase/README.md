@@ -66,7 +66,7 @@ Solo `categoria` y `descripcion` son obligatorios. La descripción debe tener en
 
 El autor puede aprobar o rechazar una reclamación pendiente. Aprobarla cambia el objeto a `en_recuperacion`; después se puede marcar esa reclamación como `entregada`, lo que cambia el objeto a `entregado`. No se puede aprobar otra reclamación mientras el objeto está en recuperación. Una reclamación pendiente puede rechazarse incluso si otra ya se aprobó. Los objetos con reclamaciones no se pueden eliminar: la API devuelve 409 para conservar el historial.
 
-La subida de imágenes aún no está implementada. El campo `ruta_storage` de las tablas de imágenes está preparado para almacenar la ruta de un archivo de Supabase Storage.
+La app sube las imágenes de objetos al bucket público `objetos-imagenes` y las imágenes de búsquedas al bucket privado `busquedas-imagenes`. Las tablas guardan la ruta; las imágenes privadas se muestran mediante enlaces temporales. La app usa el RPC `guardar_reporte` para crear o editar el registro y asociar su imagen en una transacción. Los archivos SQL `integracion-app.sql` y `archivo-local.sql` contienen las políticas y la migración aplicadas.
 
 ## Ejemplo desde Expo
 
